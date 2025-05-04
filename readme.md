@@ -49,19 +49,19 @@ An intelligent sentiment-aware chatbot that blends the power of **fine-tuned BER
 ```bash
 git clone https://github.com/your-username/bert-gpt-chatbot.git
 cd bert-gpt-chatbot
-```bash
+```
 
 ## 2. Install Dependencies
 
-```bash
+```
 python -m venv venv
 source venv/bin/activate  # or`venv\Scripts\activate` on Windows
 pip install -r requirements.txt
-```bash
+```
 
 ## 3.Download the Phi-2 Model Locally (Once)
    Requires ~5 Gb free disk space
-```bash
+```
 # In a Python script or Jupyter cell
 from huggingface_hub import snapshot_download
 
@@ -70,7 +70,7 @@ snapshot_download(
     local_dir="models/phi-2",
     local_dir_use_symlinks=False
 )
-```bash
+```
 
 Or download manually and place contents in models/phi-2.
 
