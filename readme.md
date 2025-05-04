@@ -38,7 +38,7 @@ An intelligent sentiment-aware chatbot that blends the power of **fine-tuned BER
 
 > 🔗 **[Try it on Google Colab](<https://colab.research.google.com/drive/17VTr89QegjvgTTx4a_doLZXAs6Bn_mQb?usp=sharing>)**  
 > Download the notebook and execute cell by cell to run everything in one place — including BERT + Phi-2 + GPT!
-
+> But you have to upload the python files and dataset file to use it.
 ---
 
 ### 🛠️ Local Setup Instructions
