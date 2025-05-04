@@ -1,0 +1,52 @@
+.chat-bubble {
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  background-color: #1e1e1ef0;
+}
+
+.user-bubble {
+  text-align: left;
+  background-color: #2e2e2e;
+}
+
+.bot-bubble {
+  text-align: left;
+  background-color: #1a1a1a;
+}
+
+/* Animated sentiment borders */
+.positive-border {
+  border: 2px solid #28a745;
+  box-shadow: 0 0 10px #28a745, 0 0 20px #28a74550;
+  animation: pulse-green 2s infinite;
+}
+@keyframes pulse-green {
+0% { box-shadow: 0 0 10px #28a745; }
+50% { box-shadow: 0 0 20px #28a745aa; }
+100% { box-shadow: 0 0 10px #28a745; }
+}
+
+.negative-border {
+  border: 2px solid #dc3545;
+  box-shadow: 0 0 10px #dc3545, 0 0 20px #dc354580;
+  animation: pulse-red 2s infinite;
+}
+@keyframes pulse-red {
+0% { box-shadow: 0 0 10px #dc3545; }
+50% { box-shadow: 0 0 20px #dc3545aa; }
+100% { box-shadow: 0 0 10px #dc3545; }
+}
+
+.neutral-border {
+  border: 2px solid #ffc107;
+  box-shadow: 0 0 10px #ffc107, 0 0 20px #ffc10750;
+  animation: pulse-yellow 2s infinite;
+}
+@keyframes pulse-yellow {
+0% { box-shadow: 0 0 10px #ffc107; }
+50% { box-shadow: 0 0 20px #ffc107aa; }
+100% { box-shadow: 0 0 10px #ffc107; }
+}

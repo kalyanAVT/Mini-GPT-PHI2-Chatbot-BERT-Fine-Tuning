@@ -1,0 +1,11 @@
+torch
+transformers 
+datasets
+scikit-learn
+pandas
+tqdm
+pyttsx3
+streamlit
+openai
+python-dotenv
+aceelerate

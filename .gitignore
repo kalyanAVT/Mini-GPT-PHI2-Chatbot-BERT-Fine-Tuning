@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.ipynb_checkpoints/
+.env
+*.env
+
+#cache folder
+cache/.locks
+cache/models--microsoft--phi-2
+
+# Streamlit
+.streamlit/
+
+#dataset
+dataset/training.1600000.processed.noemoticon.csv
+
+# Model files (handled by Git LFS)
+models/phi-2/
+notebook/results/checkpoin-2813
+notebook/results/checkpoint-5626
+
+# Logs and system files
+*.log
+.DS_Store
+
+# Virtual environments
+venv/
+env/
+ChaTEnv/
+
+# Colab temp files
+*.tmp
+*.temp
