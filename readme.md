@@ -70,6 +70,10 @@ snapshot_download(
     local_dir_use_symlinks=False
 )
 ```
+Change the location of the model as per your convenient. or you can keep it same like below.
+This repo has two model --
+1. model/bert_sentiment_model
+2. models/phi-2.
 
 Or download manually and place contents in models/phi-2.
 
