@@ -1,4 +1,4 @@
-# 🤖 BERT-GPT Streamlit Chatbot
+# 🤖 BERT+PHI2 model GPT Chatbot
 
 An intelligent sentiment-aware chatbot that blends the power of **fine-tuned BERT for sentiment analysis**, **local Phi-2 LLM (via Hugging Face)**, and **GPT-3.5/4 (via OpenAI API)**. Built with a clean and interactive **Streamlit UI** and equipped with **Text-to-Speech**, this app enables flexible response generation with both local and cloud-based models.
 
@@ -11,7 +11,7 @@ An intelligent sentiment-aware chatbot that blends the power of **fine-tuned BER
 - 🌐 **GPT-3.5/GPT-4 support** via OpenAI API
 - 🎨 Beautiful chat UI with animated sentiment-based borders
 - 🔊 **TTS support** using `gTTS`
-- 📁 Ready for **Google Colab** and **GitHub + Streamlit Cloud** deployment
+- 📁 Ready for **Google Colab** and **GitHub** deployment
 - 🧪 Built-in **Easter Eggs** for fun geeky interactions
 
 ---
@@ -19,7 +19,6 @@ An intelligent sentiment-aware chatbot that blends the power of **fine-tuned BER
 ## 🧰 Tech Stack
 
 - Python 3.10+
-- Streamlit
 - Hugging Face Transformers
 - PyTorch
 - gTTS (Text-to-Speech)
@@ -39,7 +38,7 @@ An intelligent sentiment-aware chatbot that blends the power of **fine-tuned BER
 
 > 🔗 **[Try it on Google Colab](<https://colab.research.google.com/drive/17VTr89QegjvgTTx4a_doLZXAs6Bn_mQb?usp=sharing>)**  
 > Download the notebook and execute cell by cell to run everything in one place — including BERT + Phi-2 + GPT!
-
+> But you have to upload the python files and dataset file to use it.
 ---
 
 ### 🛠️ Local Setup Instructions
@@ -71,6 +70,10 @@ snapshot_download(
     local_dir_use_symlinks=False
 )
 ```
+Change the location of the model as per your convenient. or you can keep it same like below.
+This repo has two model --
+1. model/bert_sentiment_model
+2. models/phi-2.
 
 Or download manually and place contents in models/phi-2.
 
