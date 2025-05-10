@@ -1,6 +1,8 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from sentiment import predict_sentiment
 import torch
+import requests
+import json
 
 # Load phi-2 locally from custom directory
 PHI2_PATH = "models/phi-2"
@@ -34,10 +36,8 @@ class LocalLLMResponder:
 
         with torch.no_grad():
             outputs = self.model.generate(**inputs, max_new_tokens=150, temperature=0.7)
-        
-        response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-        # Remove prompt from response (extract only reply)
+        response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
         reply = response.replace(prompt, "").strip()
         return reply, "phi-2"
 
@@ -55,3 +55,49 @@ User: {message}
 Assistant:"""
 
         return prompt
+
+
+class FlanT5Responder:
+    def __init__(self, restapi_url):
+        self.restapi_url = restapi_url
+
+    def generate_response(self, question, context=""):
+        sentiment = predict_sentiment(question)["label"]
+        if not context:
+            context = "This chat is to support the user, and you are friendly, taking care of the user. You are a helpful assistant."
+
+        # Updated prompt format for FLAN-T5 instruction-following
+        inputs_text = (
+            f"Instruction: Answer the user's question in a friendly and helpful way.\n\n"
+            f"User: {question}\n\n"
+            f"Context: {context}"
+        )
+
+        headers = {"Content-Type": "application/json"}
+        try:
+            response = requests.post(self.restapi_url, json={"inputs": inputs_text}, headers=headers)
+            response.raise_for_status()
+            result = response.json()
+
+            if isinstance(result, dict) and "body" in result:
+                inner_body = json.loads(result["body"])
+                answer_data = inner_body.get("answer", [])
+                if isinstance(answer_data, list) and len(answer_data) > 0:
+                    generated_text = answer_data[0].get("generated_text", "").strip()
+                else:
+                    generated_text = ""
+            elif isinstance(result, list) and "generated_text" in result[0]:
+                generated_text = result[0]["generated_text"].strip()
+            else:
+                generated_text = ""
+
+            # Fallback if empty or echo
+            if not generated_text or question.lower() in generated_text.lower():
+                generated_text = "⚠️ No proper answer generated."
+
+            return generated_text, "flan-t5"
+
+        except requests.RequestException as e:
+            return f"Error: Failed to reach API - {e}", "flan-t5"
+        except Exception as e:
+            return f"Error: {e}", "flan-t5"

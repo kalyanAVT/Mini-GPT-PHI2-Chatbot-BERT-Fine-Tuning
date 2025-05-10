@@ -1,7 +1,7 @@
 import streamlit as st
 from sentiment import predict_sentiment
 from gpt import chat_with_gpt
-from llm_wrapper import LocalLLMResponder
+from llm_wrapper import LocalLLMResponder, FlanT5Responder
 from easter_eggs import check_easter_eggs
 from tts import speak, stop
 import os
@@ -12,20 +12,22 @@ load_dotenv()
 
 st.set_page_config(page_title="Geeky GPT Chatbot 🤖", layout="wide")
 
-# Inject external CSS
 with open("styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# Session state
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 if "speaking_id" not in st.session_state:
     st.session_state.speaking_id = None
 
-# Sidebar
+# ---------------- SIDEBAR ---------------- #
 with st.sidebar:
     st.title("⚙️ Settings")
-    model_choice = st.selectbox("Choose Model", ["GPT (via API)", "Phi-2 (Local)"])
+    model_choice = st.selectbox(
+        "Choose Model",
+        ["GPT (via API)", "Phi-2 (Local_Download)", "FLAN-T5 (AWS SageMaker)"],
+        index=0
+    )
     st.radio("🧪 Style Mode", ["Normal", "Techy"], horizontal=True, key="style_mode")
 
     if model_choice == "GPT (via API)":
@@ -33,32 +35,55 @@ with st.sidebar:
         if api_key:
             os.environ["OPENAI_API_KEY"] = api_key
 
+    if model_choice == "FLAN-T5 (AWS SageMaker)":
+        restapi_url = st.text_input("Paste your FLAN-T5 Invoke URL", type="password")
+        if restapi_url and not restapi_url.startswith("https://"):
+            st.error("⚠️ Invalid URL. Please enter a valid FLAN-T5 Invoke URL.")
+        if restapi_url:
+            st.session_state["lambda_invoke_url"] = restapi_url
+
     st.divider()
     st.title("🎨 Chat Bubble Legend")
     st.markdown("- 🟢 **Positive** → Green animated glow")
     st.markdown("- 🔴 **Negative** → Red animated glow")
     st.markdown("- 🟡 **Neutral** → Yellow animated glow")
 
-# Load local model once
-if "local_llm" not in st.session_state:
-    st.session_state.local_llm = LocalLLMResponder()
-
-# Chat input and title
-st.title("💬 Geeky GPT + BERT + Phi-2 Chatbot")
+# ---------------- MAIN APP ---------------- #
+st.title("💬 Geeky GPT + BERT + Phi-2 + FLAN-T5 Chatbot")
 user_input = st.chat_input("Type your message here...")
 
-# Handle new message
+DEFAULT_CONTEXT = "This chat is to support the user, and you are friendly, taking care of the user. You are a helpful assistant."
+
+# Lazy-load models based on choice
+if model_choice == "Phi-2 (Local_Download)" and "local_llm" not in st.session_state:
+    st.session_state.local_llm = LocalLLMResponder()
+
+if model_choice == "FLAN-T5 (AWS SageMaker)" and "flan_t5" not in st.session_state:
+    lambda_url = st.session_state.get("lambda_invoke_url") or os.getenv("LAMBDA_INVOKE_URL")
+    if lambda_url:
+        st.session_state.flan_t5 = FlanT5Responder(lambda_url)
+
 if user_input:
     sentiment = predict_sentiment(user_input)["label"]
     override = check_easter_eggs(user_input)
 
     if override:
         reply, model_used = override, "Easter Egg"
+
     elif model_choice == "GPT (via API)" and os.getenv("OPENAI_API_KEY"):
         reply = chat_with_gpt(user_input, style=st.session_state.style_mode.lower())
         model_used = "GPT"
-    else:
+
+    elif model_choice == "FLAN-T5 (AWS SageMaker)" and "flan_t5" in st.session_state:
+        reply, model_used = st.session_state.flan_t5.generate_response(user_input, context=DEFAULT_CONTEXT)
+        if not reply or reply.strip().lower() in ["no answer found.", "no valid response format found."]:
+            reply = "⚠️ No answer from the API."
+
+    elif model_choice == "Phi-2 (Local_Download)" and "local_llm" in st.session_state:
         reply, model_used = st.session_state.local_llm.generate_response(user_input)
+
+    else:
+        reply, model_used = "⚠️ Model not selected or not initialized.", "Error"
 
     st.session_state.chat_history.append({
         "id": str(uuid.uuid4()),
@@ -68,7 +93,7 @@ if user_input:
         "model": model_used
     })
 
-# Show messages
+# ---------------- CHAT UI ---------------- #
 for msg in st.session_state.chat_history:
     sentiment_class = {
         "Positive": "positive-border",

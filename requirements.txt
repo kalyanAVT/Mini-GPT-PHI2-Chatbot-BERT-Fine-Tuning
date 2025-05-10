@@ -9,3 +9,6 @@ streamlit
 openai
 python-dotenv
 aceelerate
+requests
+json
+boto3 # For AWS lamb

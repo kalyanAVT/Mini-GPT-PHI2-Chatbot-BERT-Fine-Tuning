@@ -78,7 +78,7 @@ Or download manually and place contents in models/phi-2.
 If using GPT-3.5/4, input your OpenAI API key in the sidebar securely. Your key is not stored.
 
 📌 Note About Google Colab
-If you want to run the entire project in Google Colab, we’ve prepared a single notebook for that.
+If you want to run the entire project in Google Colab, I’ve prepared a single notebook for that.(Note:- "This notebook does not contain any AWS SageMaker features or files.")
 
 📎 **[Open in Colab](<notebook/implement_with_colab.ipynb>)**
 Download the notebook and execute each cell to:
@@ -91,6 +91,62 @@ Start Streamlit UI
 
 Test chatbot responses
 
+## New feature
+now you can use APi Gateway of AWS to deploy and get response with this process:
+🚀 How to Run MOdel in on AWS SageMaker
+
+Hey there! 👋 Here's how you can run big Models of HuggingFace using AWS SageMaker + Lambda + API Gateway. Let’s get started:
+
+📓 1. Launch JupyterLab in SageMaker
+Go to your AWS SageMaker Console.
+
+Create a Notebook instance (e.g., ml.m3.medium/ml.m5.xlarge) FreeTier.
+
+After it’s ready, click Open JupyterLab.
+
+Upload or clone this repo into the notebook instance. OR make a new file and paste each cell in it. Here this is the [notebook](<notebook/jupyterlab_file-for-sagemaker-instance.ipynb>)
+
+🛠️ 2. Set Up the Lambda Function
+In the AWS Lambda Console, create a new function.
+
+Use the [lambda_function.py](<lambda_function.py>) from this repo.
+
+Set the runtime to Python 3.x.
+
+Make sure the function has permission to be invoked via API Gateway.
+
+Change the EndPoint name in the file after Executing the jupyter notebook.
+
+Then Deploy the Function.
+
+🌐 3. Connect API Gateway
+Go to API Gateway Console.
+
+Create a REST API.
+
+Add a resource like /invoke.
+
+Add a POST method linked to your Lambda.
+
+Deploy the API to a stage (e.g., prod).
+
+Copy the Invoke URL, e.g.:
+```bash
+https://your-api-id.execute-api.us-east-1.amazonaws.com/prod/invoke
+```
+🔑 4. Configure the .env File
+Update the .env file in the root of this project:
+
+```bash
+LAMBDA_INVOKE_URL="https://your-api-id.execute-api.us-east-1.amazonaws.com/prod/invoke"
+```
+✅ That’s It!
+You're now ready to use this project with AWS services.
+Run the app, interact with the chatbot, and trigger the Lambda using your SageMaker notebook!
+
 📜 License
-MIT License © 2025 [kalyan]
+## License
+
+This project does not currently have an open-source license. All rights are reserved by the author. Please contact the repository owner if you wish to use or contribute to this project.
+[kalyan](<https://github.com/kalyanAVT>)
 
