@@ -1,4 +1,4 @@
-# 🤖 BERT+PHI2 model GPT Chatbot
+# 🤖 Geeky GPT + BERT + Phi-2 + FLAN-T5 Chatbot
 
 An intelligent sentiment-aware chatbot that blends the power of **fine-tuned BERT for sentiment analysis**, **local Phi-2 LLM (via Hugging Face)**, and **GPT-3.5/4 (via OpenAI API)**. Built with a clean and interactive **Streamlit UI** and equipped with **Text-to-Speech**, this app enables flexible response generation with both local and cloud-based models.
 
@@ -9,8 +9,9 @@ An intelligent sentiment-aware chatbot that blends the power of **fine-tuned BER
 - 🧠 **Fine-tuned BERT** sentiment classifier
 - 💬 **Local Phi-2 LLM** response generation (no internet required after download)
 - 🌐 **GPT-3.5/GPT-4 support** via OpenAI API
+- ☁️ **Google/FLAN-T5-base model** Interact with Api gateway with AWS Sagemaker
 - 🎨 Beautiful chat UI with animated sentiment-based borders
-- 🔊 **TTS support** using `gTTS`
+- 🔊 **TTS support** using `pyTTSx3`
 - 📁 Ready for **Google Colab** and **GitHub** deployment
 - 🧪 Built-in **Easter Eggs** for fun geeky interactions
 
@@ -21,7 +22,8 @@ An intelligent sentiment-aware chatbot that blends the power of **fine-tuned BER
 - Python 3.10+
 - Hugging Face Transformers
 - PyTorch
-- gTTS (Text-to-Speech)
+- pyTTSx3 (Text-to-Speech)
+- AWS Sagemaker
 - Git LFS (for large model storage)
 - Google Colab (optional run)
 
@@ -31,6 +33,7 @@ An intelligent sentiment-aware chatbot that blends the power of **fine-tuned BER
 
 - `bert-base-uncased` (fine-tuned for sentiment)
 - `microsoft/phi-2` (loaded locally)
+- `Google/flan-t5-base`(loaded in cloud,access with api)
 - Optional GPT model via OpenAI API
 
 ---
@@ -46,8 +49,8 @@ An intelligent sentiment-aware chatbot that blends the power of **fine-tuned BER
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/bert-gpt-chatbot.git
-cd bert-gpt-chatbot
+git clone https://github.com/kalyanAVT/Mini-GPT-PHI2-Chatbot-BERT-Fine-Tuning.git
+cd Mini-GPT-PHI2-Chatbot-BERT-Fine-Tuning
 ```
 
 ## 2. Install Dependencies
@@ -71,11 +74,11 @@ snapshot_download(
 )
 ```
 Change the location of the model as per your convenient. or you can keep it same like below.
-This repo has two model --
+This repo has two models --
 1. model/bert_sentiment_model
 2. models/phi-2.
 
-Or download manually and place contents in models/phi-2.
+Or download manually and place contents in models/phi-2./ use new feature to deploy model in AWS Sagemaker.
 
 🔑 OpenAI API Key
 If using GPT-3.5/4, input your OpenAI API key in the sidebar securely. Your key is not stored.
@@ -147,8 +150,7 @@ LAMBDA_INVOKE_URL="https://your-api-id.execute-api.us-east-1.amazonaws.com/prod/
 You're now ready to use this project with AWS services.
 Run the app, interact with the chatbot, and trigger the Lambda using your SageMaker notebook!
 
-📜 License
-## License
+## 📜 License
 
 This project does not currently have an open-source license. All rights are reserved by the author. Please contact the repository owner if you wish to use or contribute to this project.
 [kalyan](<https://github.com/kalyanAVT>)
